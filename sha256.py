@@ -1,5 +1,4 @@
-"""This Python module is an implementation of the SHA-256 algorithm.
-From https://github.com/keanemind/Python-SHA-256"""
+"""From https://github.com/keanemind/Python-SHA-256"""
 
 K = [
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,

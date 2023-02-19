@@ -23,7 +23,7 @@ def add_transaction(reciver, sender = owner ,amount=1.0):
 
 def mine_block():
     last_block = blockchain[-1] 
-    hashed_block = '-----'.join([str(last_block[key]) for key in last_block])
+    hashed_block = hash_block(last_block)
     #for key in last_block:
     #    value = last_block[key]
     #    hashed_block = hashed_block + str(value)
@@ -32,6 +32,10 @@ def mine_block():
             'index':len(blockchain),
             'transactions': open_transactions }
     blockchain.append(block)
+
+def hash_block(block):
+    return '-'.join([str(block[key])for key in block])
+
 
 
 def get_transaction_value():
@@ -56,16 +60,22 @@ def print_blockchain_elements():
 
 
 def verify_chain():
-    #block_index = 0
-    is_valid = True
-    for block_index in range(len(blockchain)):
-        if block_index == 0:
+    for (index,block)in enumerate(blockchain):
+        if index == 0:
             continue
-        elif blockchain[block_index][0] == blockchain[block_index - 1]:
-            is_valid = True
-        else:
-            is_valid = False
-            break
+        if block['previous_hash'] != hash_block(blockchain[index-1])
+            return False 
+    return True
+    # block_index = 0
+    # is_valid = True
+    # for block_index in range(len(blockchain)):
+    #     if block_index == 0:
+    #         continue
+    #     elif blockchain[block_index][0] == blockchain[block_index - 1]:
+    #         is_valid = True
+    #     else:
+    #         is_valid = False
+    #         break
     # for block in blockchain:
     #     if block_index == 0:
     #         block_index += 1
@@ -76,11 +86,10 @@ def verify_chain():
     #         is_valid = False
     #         break
     #     block_index += 1
-    return is_valid
+    
 
 
 waiting_for_input = True
-
 while waiting_for_input:
     print('Please wähle: ')
     print('1. Add a new value to the blockchain')
