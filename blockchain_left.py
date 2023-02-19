@@ -1,5 +1,7 @@
-blockchain = []
-
+genesis_block = {'previous_block':'', 'index':0, 'transactions':[]}
+blockchain = [[genesis_block]]
+open_transactions = []
+owner = 'hmannx'
 
 def get_last_blockchain_value():
     """ Returns the last value of the current blockchain or None if the blockchain is empty"""
@@ -8,22 +10,33 @@ def get_last_blockchain_value():
     return blockchain[-1]
 
 
-def add_transaction(transaction_amount, last_transaction=[1]):
-    """ Appen a new value as well as the last blockchain value to the blockchain
+def add_transaction(reciver, sender = owner ,amount=1.0):
+    """ Append a new value as well as the last blockchain value to the blockchain
     Arguments:
-        :transaction_amount: The amount that should be added
-        :last_transaction: The last blockchain transaction (default: [1])
+       :sender - the coinsender
+       :recipient - the coinempfänger
+       :amount - how much coins
      """
-    if last_transaction == None:
-        last_transaction = [1]
+    transaction = {'sender':sender, 'reciver':reciver, 'amount':amount}
+    open_transactions.append(transaction)
 
-    blockchain.append([last_transaction, transaction_amount])
-    return blockchain
+
+def mine_block():
+    last_block = blockchain[-1] 
+    block= {'previous_hash':'xyz',
+            'index':len(blockchain),
+            'transactions': open_transactions }
+    blockchain.append(block)
 
 
 def get_transaction_value():
-    """ Returns the input of the user (a new transaction amount) as a float """
-    return float(input('Your transaction amount: '))
+    
+    """ Returns the input of the user (a new transaction amount) as a float 
+         and the recipient of the coins you send                            """
+    
+    tx_recipient = input('enter the reciver of your transaction: ')
+    tx_amount = float(input('Your transaction amount: '))
+    return (tx_recipient, tx_amount)
 
 
 def get_user_choice():
@@ -33,6 +46,7 @@ def get_user_choice():
 def print_blockchain_elements():
     for block in blockchain:
         print(block)
+        print('-|'*33)
 
 
 def verify_chain():
@@ -62,15 +76,17 @@ def verify_chain():
 waiting_for_input = True
 
 while waiting_for_input:
-    print('Please choose: ')
+    print('Please wähle: ')
     print('1. Add a new value to the blockchain')
-    print('2. Outputh the blockchain blocks')
+    print('2. Output the blockchain blocks')
     print('h. Manipulate the chain')
     print('q. Quit')
     user_choice = get_user_choice()
     if user_choice == '1':
-        tx_value = get_transaction_value()
-        add_transaction(tx_value, get_last_blockchain_value())
+        tx_data = get_transaction_value()
+        reciver, amount = tx_data
+        add_transaction(reciver, amount=amount)
+        print('open transactions: ', open_transactions)
     elif user_choice == '2':
         print_blockchain_elements()
     elif user_choice == 'h':
