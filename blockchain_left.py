@@ -109,7 +109,7 @@ while waiting_for_input:
         print_blockchain_elements()
     elif user_choice == 'h':
         if len(blockchain)>=1:
-            blockchain[0] = [2]
+            blockchain[0] = {'previous_block':'', 'index':0, 'transactions':[]}
     elif user_choice == 'q':
         waiting_for_input = False
     else:
