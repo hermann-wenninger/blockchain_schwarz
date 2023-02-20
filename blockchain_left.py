@@ -1,7 +1,12 @@
+import sha256
+print(sha256.generate_hash("Hello").hex())
+
 genesis_block = {'previous_block':'', 'index':0, 'transactions':[]}
 blockchain = [genesis_block]
 open_transactions = []
 owner = 'hmannx'
+participants = {}
+participants =  set(participants)
 
 def get_last_blockchain_value():
     """ Returns the last value of the current blockchain or None if the blockchain is empty"""
@@ -19,6 +24,8 @@ def add_transaction(reciver, sender = owner ,amount=1.0):
      """
     transaction = {'sender':sender, 'reciver':reciver, 'amount':amount}
     open_transactions.append(transaction)
+    participants.add(sender)
+    participants.add(reciver)
 
 
 def mine_block():
@@ -63,7 +70,7 @@ def verify_chain():
     for (index,block)in enumerate(blockchain):
         if index == 0:
             continue
-        if block['previous_hash'] != hash_block(blockchain[index-1])
+        if block['previous_hash'] != hash_block(blockchain[index-1]):
             return False 
     return True
     # block_index = 0
@@ -109,7 +116,7 @@ while waiting_for_input:
         print_blockchain_elements()
     elif user_choice == 'h':
         if len(blockchain)>=1:
-            blockchain[0] = {'previous_block':'', 'index':0, 'transactions':[]}
+            blockchain[0] = {'previous_block':'', 'index':0, 'transactions':[{'sender':'Limbus','reciver':'Manu','amount':0.1}]}
     elif user_choice == 'q':
         waiting_for_input = False
     else:

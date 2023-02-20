@@ -1,1 +1,1 @@
-#### little Python blockchain for console
+#### little Python blockchain
