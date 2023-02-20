@@ -1,6 +1,7 @@
 import sha256
 print('sha256: ',sha256.generate_hash("Hello World").hex())
 
+MIN_GAS = 0.001
 genesis_block = {'previous_block':'', 'index':0, 'transactions':[]}
 blockchain = [genesis_block]
 open_transactions = []
@@ -15,13 +16,42 @@ def get_last_blockchain_value():
 
 
 def get_balance(participant):
-    ''' get the balance of '''
+    ''' get the balance of sender and reciver'''
+    open_tx_sender = [[tx['amount'] for tx in open_transactions if tx['sender'] == participant]]
     tx_sender = [[tx['amount'] for tx in block['transactions']if tx['sender']==participant]for block in blockchain]
-    amount_sent = 0
-    for coin in tx_sender:
+    tx_reciver = [[tx['amount'] for tx in block['transactions']if tx['reciver']==participant]for block in blockchain]
+    print('open_tx_sender',participant,open_tx_sender)
+    print('tx_sender', tx_sender)
+    print('tx_reciver', tx_reciver)
+    amount_open_tx_sender = 0
+    for coin in open_tx_sender:
         if len(coin)>0:
-            amount_sent += coin[0]
-    return amount_sent
+            amount_open_tx_sender+= coin[0]
+
+    # tx_sender.append(open_tx_sender)
+
+    # amount_sent = 0
+    # amount_recived = 0
+
+    # for coin in tx_sender:
+    #     if len(tx_sender)>0:
+    #         amount_sent += coin[0]
+    
+    # for coin in tx_reciver:
+    #     if len(coin)>0:
+    #         amount_recived += coin[0]
+
+    # total = amount_recived - amount_sent
+    return 30
+
+
+def verify_transaction(transaction):
+    sender_balance = get_balance(transaction['sender'])
+    return sender_balance >= transaction['amount']
+        
+
+
+
 
 def add_transaction(reciver, sender = owner ,amount=1.0):
     """ Append a new value as well as the last blockchain value to the blockchain
@@ -31,17 +61,19 @@ def add_transaction(reciver, sender = owner ,amount=1.0):
        :amount - how much coins
      """
     transaction = {'sender':sender, 'reciver':reciver, 'amount':amount}
-    open_transactions.append(transaction)
-    participants.add(sender)
-    participants.add(reciver)
+    if verify_transaction(transaction):
+        open_transactions.append(transaction)
+        participants.add(sender)
+        participants.add(reciver)
+        return True
+    return False
 
 
 def mine_block():
     last_block = blockchain[-1] 
     hashed_block = hash_block(last_block)
-    #for key in last_block:
-    #    value = last_block[key]
-    #    hashed_block = hashed_block + str(value)
+    reward_transaction = {'sender': 'MINING','reciver':owner, 'amount': MIN_GAS}
+    open_transactions.append(reward_transaction)
     print('########',hashed_block)
     block= {'previous_hash':hashed_block,
             'index':len(blockchain),
@@ -118,7 +150,10 @@ while waiting_for_input:
     if user_choice == '1':
         tx_data = get_transaction_value()
         reciver, amount = tx_data
-        add_transaction(reciver, amount=amount)
+        if add_transaction(reciver, amount=amount):
+            print('added transaction')
+        else:
+            print('transaction verweigert!!!!!!!!')
         print('open transactions: ', open_transactions)
     elif user_choice == '2':
         if mine_block():
