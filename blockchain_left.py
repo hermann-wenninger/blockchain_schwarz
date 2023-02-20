@@ -72,7 +72,11 @@ def add_transaction(reciver, sender = owner ,amount=1.0):
 def mine_block():
     last_block = blockchain[-1] 
     hashed_block = hash_block(last_block)
-    reward_transaction = {'sender': 'MINING','reciver':owner, 'amount': MIN_GAS}
+    reward_transaction = {
+        'sender': 'MINING',
+        'reciver':owner, 
+        'amount': MIN_GAS}
+    copied_transactions = open_transactions[:]
     open_transactions.append(reward_transaction)
     print('########',hashed_block)
     block= {'previous_hash':hashed_block,
