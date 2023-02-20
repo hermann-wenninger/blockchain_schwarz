@@ -1,5 +1,5 @@
 import sha256
-print(sha256.generate_hash("Hello").hex())
+print('sha256',sha256.generate_hash("Hello World").hex())
 
 genesis_block = {'previous_block':'', 'index':0, 'transactions':[]}
 blockchain = [genesis_block]
