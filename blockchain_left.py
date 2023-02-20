@@ -1,12 +1,11 @@
 import sha256
-print('sha256',sha256.generate_hash("Hello World").hex())
+print('sha256: ',sha256.generate_hash("Hello World").hex())
 
 genesis_block = {'previous_block':'', 'index':0, 'transactions':[]}
 blockchain = [genesis_block]
 open_transactions = []
 owner = 'hmannx'
-participants = {}
-participants =  set(participants)
+participants =  set()
 
 def get_last_blockchain_value():
     """ Returns the last value of the current blockchain or None if the blockchain is empty"""
@@ -14,6 +13,15 @@ def get_last_blockchain_value():
         return None
     return blockchain[-1]
 
+
+def get_balance(participant):
+    ''' get the balance of '''
+    tx_sender = [[tx['amount'] for tx in block['transactions']if tx['sender']==participant]for block in blockchain]
+    amount_sent = 0
+    for coin in tx_sender:
+        if len(coin)>0:
+            amount_sent += coin[0]
+    return amount_sent
 
 def add_transaction(reciver, sender = owner ,amount=1.0):
     """ Append a new value as well as the last blockchain value to the blockchain
@@ -39,6 +47,7 @@ def mine_block():
             'index':len(blockchain),
             'transactions': open_transactions }
     blockchain.append(block)
+    return True
 
 def hash_block(block):
     return '-'.join([str(block[key])for key in block])
@@ -102,6 +111,7 @@ while waiting_for_input:
     print('1. Add a new value to the blockchain')
     print('2. Mine new block')
     print('3. Output the blockchain blocks')
+    print('participants')
     print('h. Manipulate the chain')
     print('q. Quit')
     user_choice = get_user_choice()
@@ -111,20 +121,25 @@ while waiting_for_input:
         add_transaction(reciver, amount=amount)
         print('open transactions: ', open_transactions)
     elif user_choice == '2':
-        mine_block()
+        if mine_block():
+            open_transactions = []
     elif user_choice == '3':
         print_blockchain_elements()
+    elif user_choice == '4':
+        print(participants)
     elif user_choice == 'h':
         if len(blockchain)>=1:
             blockchain[0] = {'previous_block':'', 'index':0, 'transactions':[{'sender':'Limbus','reciver':'Manu','amount':0.1}]}
     elif user_choice == 'q':
         waiting_for_input = False
+        break
     else:
         print('Input was invalid, please pick a value from the list')
     if not verify_chain():
         print_blockchain_elements()
         print('WARNING: Invalid blockchain')
         break
+    print(get_balance('hmannx'))
         #waiting_for_input =  False
 
 
