@@ -27,22 +27,22 @@ def get_balance(participant):
     for coin in open_tx_sender:
         if len(coin)>0:
             amount_open_tx_sender+= coin[0]
-
+    print('#### amount_open_tx_sender', amount_open_tx_sender)
     # tx_sender.append(open_tx_sender)
 
-    # amount_sent = 0
-    # amount_recived = 0
+    amount_sent = 0
+    amount_recived = 0
 
-    # for coin in tx_sender:
-    #     if len(tx_sender)>0:
-    #         amount_sent += coin[0]
+    for coin in tx_sender:
+         if len(coin)>0:
+             amount_sent += coin[0]
     
-    # for coin in tx_reciver:
-    #     if len(coin)>0:
-    #         amount_recived += coin[0]
+    for coin in tx_reciver:
+         if len(coin)>0:
+             amount_recived += coin[0]
 
-    # total = amount_recived - amount_sent
-    return 30
+    total = amount_recived - amount_sent
+    return total
 
 
 def verify_transaction(transaction):
