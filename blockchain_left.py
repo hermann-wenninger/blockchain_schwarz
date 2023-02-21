@@ -17,9 +17,16 @@ def get_last_blockchain_value():
 
 def get_balance(participant):
     ''' get the balance of sender and reciver'''
+    
     open_tx_sender = [[tx['amount'] for tx in open_transactions if tx['sender'] == participant]]
     tx_sender = [[tx['amount'] for tx in block['transactions']if tx['sender']==participant]for block in blockchain]
+    for coin in tx_sender:
+        if len(coin)>0:
+            amount_sent += coin[0]
+
+    tx_sender.append(open_tx_sender)
     tx_reciver = [[tx['amount'] for tx in block['transactions']if tx['reciver']==participant]for block in blockchain]
+
     print('open_tx_sender',participant,open_tx_sender)
     print('tx_sender', tx_sender)
     print('tx_reciver', tx_reciver)
@@ -33,9 +40,7 @@ def get_balance(participant):
     amount_sent = 0
     amount_recived = 0
 
-    for coin in tx_sender:
-         if len(coin)>0:
-             amount_sent += coin[0]
+   
     
     for coin in tx_reciver:
          if len(coin)>0:
@@ -51,6 +56,16 @@ def verify_transaction(transaction):
         
 
 
+def verify_transactions():
+    is_valid = True
+    for tx in open_transactions:
+        if verify_transaction(tx):
+            is_valid = True
+        else:
+            is_valid = False
+    return is_valid
+
+
 
 
 def add_transaction(reciver, sender = owner ,amount=1.0):
@@ -61,7 +76,7 @@ def add_transaction(reciver, sender = owner ,amount=1.0):
        :amount - how much coins
      """
     transaction = {'sender':sender, 'reciver':reciver, 'amount':amount}
-    if verify_transaction(transaction):
+    if not verify_transaction(transaction):
         open_transactions.append(transaction)
         participants.add(sender)
         participants.add(reciver)
@@ -143,7 +158,7 @@ while waiting_for_input:
     print('1. Add a new value to the blockchain')
     print('2. Mine new block')
     print('3. Output the blockchain blocks')
-    print('participants')
+    print('4. print participants')
     print('h. Manipulate the chain')
     print('q. Quit')
     user_choice = get_user_choice()
@@ -151,7 +166,7 @@ while waiting_for_input:
         tx_data = get_transaction_value()
         reciver, amount = tx_data
         if add_transaction(reciver, amount=amount):
-            print('added transaction')
+            print('added transaction succesfull')
         else:
             print('transaction verweigert!!!!!!!!')
         print('open transactions: ', open_transactions)
@@ -162,6 +177,11 @@ while waiting_for_input:
         print_blockchain_elements()
     elif user_choice == '4':
         print(participants)
+    elif user_choice == '5':
+        if verify_transactions():
+            print('all transactions are ok')
+        else:
+            print('transactions are invalid')
     elif user_choice == 'h':
         if len(blockchain)>=1:
             blockchain[0] = {'previous_block':'', 'index':0, 'transactions':[{'sender':'Limbus','reciver':'Manu','amount':0.1}]}
