@@ -17,6 +17,8 @@ def get_last_blockchain_value():
 
 def get_balance(participant):
     ''' get the balance of sender and reciver'''
+    amount_sent = 0
+    amount_recived = 0
     
     open_tx_sender = [[tx['amount'] for tx in open_transactions if tx['sender'] == participant]]
     tx_sender = [[tx['amount'] for tx in block['transactions']if tx['sender']==participant]for block in blockchain]
@@ -37,8 +39,7 @@ def get_balance(participant):
     print('#### amount_open_tx_sender', amount_open_tx_sender)
     # tx_sender.append(open_tx_sender)
 
-    amount_sent = 0
-    amount_recived = 0
+    
 
    
     
@@ -57,13 +58,7 @@ def verify_transaction(transaction):
 
 
 def verify_transactions():
-    is_valid = True
-    for tx in open_transactions:
-        if verify_transaction(tx):
-            is_valid = True
-        else:
-            is_valid = False
-    return is_valid
+    return all([verify_transaction[tx]for tx in open_transactions])
 
 
 
@@ -76,7 +71,7 @@ def add_transaction(reciver, sender = owner ,amount=1.0):
        :amount - how much coins
      """
     transaction = {'sender':sender, 'reciver':reciver, 'amount':amount}
-    if not verify_transaction(transaction):
+    if  verify_transaction(transaction):
         open_transactions.append(transaction)
         participants.add(sender)
         participants.add(reciver)
@@ -159,6 +154,7 @@ while waiting_for_input:
     print('2. Mine new block')
     print('3. Output the blockchain blocks')
     print('4. print participants')
+    print('5. verify transactions')
     print('h. Manipulate the chain')
     print('q. Quit')
     user_choice = get_user_choice()
@@ -195,6 +191,7 @@ while waiting_for_input:
         print('WARNING: Invalid blockchain')
         break
     print(get_balance('hmannx'))
+    print('the balance of {owner} is {number}'.format(owner = owner, number = get_balance(owner)))
         #waiting_for_input =  False
 
 
