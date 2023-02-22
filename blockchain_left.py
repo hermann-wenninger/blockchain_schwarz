@@ -1,4 +1,5 @@
 import sha256
+import functools
 print('sha256: ',sha256.generate_hash("Hello World").hex())
 
 MIN_GAS = 0.001
@@ -22,9 +23,11 @@ def get_balance(participant):
     
     open_tx_sender = [[tx['amount'] for tx in open_transactions if tx['sender'] == participant]]
     tx_sender = [[tx['amount'] for tx in block['transactions']if tx['sender']==participant]for block in blockchain]
-    for coin in tx_sender:
-        if len(coin)>0:
-            amount_sent += coin[0]
+    amount_sent = functools.reduce(lambda tx_sum, tx_amt:tx_sum + tx_amt[0],tx_sender,0 )
+    
+    # for coin in tx_sender:
+    #     if len(coin)>0:
+    #         amount_sent += coin[0]
 
     tx_sender.append(open_tx_sender)
     tx_reciver = [[tx['amount'] for tx in block['transactions']if tx['reciver']==participant]for block in blockchain]
@@ -192,6 +195,8 @@ while waiting_for_input:
         break
     print(get_balance('hmannx'))
     print('the balance of {owner} is {number}'.format(owner = owner, number = get_balance(owner)))
+else:
+    print('user is not in our system')
         #waiting_for_input =  False
 
 
