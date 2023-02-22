@@ -1,0 +1,5 @@
+*.json
+*.sqlite
+*.suo
+*.h
+*.c
