@@ -16,4 +16,4 @@
 *.jpg
 *jpeg
 
-*.pyc
+__pycache__/*.pyc
