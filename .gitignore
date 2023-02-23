@@ -1,5 +1,17 @@
+
+*.js
 *.json
 *.sqlite
 *.suo
+
+#envelop
 *.h
 *.c
+*.exe
+*.sh
+*.cpp
+*.am
+
+*.png
+*.jpg
+*jpeg

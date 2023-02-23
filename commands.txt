@@ -1,0 +1,10 @@
+net stop MongoDB
+net start MongoDB
+or windows services
+
+mongosh.exe
+or 
+mongo.exe
+
+
+show dbs
