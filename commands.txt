@@ -8,3 +8,7 @@ mongo.exe
 
 
 show dbs
+
+use database
+database> db.kunstwerk.insertOne({titel:'hmax',price:4500})
+database> db.kunstwerk.find()
