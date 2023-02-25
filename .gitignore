@@ -16,4 +16,3 @@
 *.jpg
 *jpeg
 
-__pycache__/*.pyc

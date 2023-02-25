@@ -12,3 +12,5 @@ show dbs
 use database
 database> db.kunstwerk.insertOne({titel:'hmax',price:4500})
 database> db.kunstwerk.find()
+
+_id  = the possibility to take a own id
