@@ -34,3 +34,6 @@ deleteOne(filter, options)        #
 deleteMany(filter, options)       #
 ###################################
 
+db.database.updateOne({marker:1}, {$set:{marker:'new'}})
+db.database.updateMany({}, {$set:{marker:'new'}})
+
