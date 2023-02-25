@@ -14,3 +14,22 @@ database> db.kunstwerk.insertOne({titel:'hmax',price:4500})
 database> db.kunstwerk.find()
 
 _id  = the possibility to take a own id
+
+db.database.find().pretty() /* it looks nice and pretty()*/
+
+
+CRUD OPERATIONS
+###################################
+insertOne(data, options)          #
+insertMany(data, options)         #
+                                  #
+find(filter,options)              #
+findOne(filter, options)          #
+                                  #
+updateOne(filter, data, options)  #
+updateMany(filter, data options)  #
+replaceOne(filter, data, options) #
+                                  #
+deleteOne(filter, options)        #
+deleteMany(filter, options)       #
+###################################
