@@ -1,5 +1,5 @@
 import sha256
-import functools
+from functools import reduce
 import hashlib
 import json
 print('sha256: ',sha256.generate_hash("Hello World").hex())
@@ -10,6 +10,25 @@ blockchain = [genesis_block]
 open_transactions = []
 owner = 'hmannx'
 participants =  set()
+
+
+def valid_proof(transactions, last_hash, proof):
+    guess = (str(transactions) + str(last_hash) + str(proof)).encode()
+    guess_hash = hashlib.sha256(guess)
+    print(guess_hash)
+   
+    return guess_hash[0:2] == '00'
+
+
+def proof_of_work():
+    last_block = blockchain[-1]
+    last_hash = hash_block(last_block)
+    proof = 0
+    while valid_proof(open_transactions, last_hash, proof):
+        proof += 1
+    return proof
+
+
 
 def get_last_blockchain_value():
     """ Returns the last value of the current blockchain or None if the blockchain is empty"""
@@ -25,7 +44,7 @@ def get_balance(participant):
     
     open_tx_sender = [[tx['amount'] for tx in open_transactions if tx['sender'] == participant]]
     tx_sender = [[tx['amount'] for tx in block['transactions']if tx['sender']==participant]for block in blockchain]
-    amount_sent = functools.reduce(lambda tx_sum, tx_amt:tx_sum + sum(tx_amt) if len(tx_amt)>0 else tx_sum + 0,tx_sender,0 )
+    amount_sent = reduce(lambda tx_sum, tx_amt:tx_sum + sum(tx_amt) if len(tx_amt)>0 else tx_sum + 0,tx_sender,0 )
     #amount_recived = functools.reduce(lambda tx_sum, tx_amt: tx_sum + sum(tx_amt) if len(tx_amt)>0)
     # for coin in tx_sender:
     #     if len(coin)>0:
@@ -87,12 +106,16 @@ def add_transaction(reciver, sender = owner ,amount=1.0):
 def mine_block():
     last_block = blockchain[-1] 
     hashed_block = hash_block(last_block)
+    proof = proof_of_work()
     reward_transaction = {'sender': 'MINING','reciver':owner, 'amount': MIN_GAS}
     open_transactions.append(reward_transaction)
     print('######## : ',hashed_block)
-    block= {'previous_hash':hashed_block,
+    block= {
+            'previous_hash':hashed_block,
             'index':len(blockchain),
-            'transactions': open_transactions }
+            'transactions': open_transactions,
+            'proof': proof 
+            }
     blockchain.append(block)
     return True
 
