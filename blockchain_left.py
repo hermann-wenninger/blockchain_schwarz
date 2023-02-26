@@ -1,5 +1,7 @@
 import sha256
 import functools
+import hashlib
+import json
 print('sha256: ',sha256.generate_hash("Hello World").hex())
 
 MIN_GAS = 0.001
@@ -23,8 +25,8 @@ def get_balance(participant):
     
     open_tx_sender = [[tx['amount'] for tx in open_transactions if tx['sender'] == participant]]
     tx_sender = [[tx['amount'] for tx in block['transactions']if tx['sender']==participant]for block in blockchain]
-    amount_sent = functools.reduce(lambda tx_sum, tx_amt:tx_sum + tx_amt[0] if len(tx_amt)>0 else 0,tx_sender,0 )
-   
+    amount_sent = functools.reduce(lambda tx_sum, tx_amt:tx_sum + sum(tx_amt) if len(tx_amt)>0 else tx_sum + 0,tx_sender,0 )
+    #amount_recived = functools.reduce(lambda tx_sum, tx_amt: tx_sum + sum(tx_amt) if len(tx_amt)>0)
     # for coin in tx_sender:
     #     if len(coin)>0:
     #         amount_sent += coin[0]
@@ -87,7 +89,7 @@ def mine_block():
     hashed_block = hash_block(last_block)
     reward_transaction = {'sender': 'MINING','reciver':owner, 'amount': MIN_GAS}
     open_transactions.append(reward_transaction)
-    print('########',hashed_block)
+    print('######## : ',hashed_block)
     block= {'previous_hash':hashed_block,
             'index':len(blockchain),
             'transactions': open_transactions }
@@ -95,7 +97,7 @@ def mine_block():
     return True
 
 def hash_block(block):
-    return '-'.join([str(block[key])for key in block])
+    return hashlib.sha256(json.dumps(block).encode()).hexdigest()
 
 
 
