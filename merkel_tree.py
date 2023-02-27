@@ -13,6 +13,7 @@ class Node:
     @staticmethod
     def hash(val: str)-> str:
         return hashlib.sha256(val.encode("utf-8")).hexdigest()
+    
     def __str__(self):
         return(str(self.value))
 
@@ -39,8 +40,10 @@ class MerkleTree:
          value: str = Node.hash(left.value + right.value)
          content: str = self.__buildTreeRec(nodes[:half]).content+"+"+self.__buildTreeRec(nodes[half:]).content
          return Node(left, right, value,content)
+    
     def printTree(self)-> None:
         self.__printTreeRec(self.root)
+    
     def __printTreeRec(self, node)-> None:
         if node != None:
            if node.left != None:

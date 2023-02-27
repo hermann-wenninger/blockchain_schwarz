@@ -5,7 +5,7 @@ import json
 print('sha256: ',sha256.generate_hash("Hello World").hex())
 
 MIN_GAS = 0.001
-genesis_block = {'previous_block':'', 'index':0, 'transactions':[]}
+genesis_block = {'previous_block':'', 'index':0, 'transactions':[],'proof':100}
 blockchain = [genesis_block]
 open_transactions = []
 owner = 'hmannx'
@@ -24,7 +24,7 @@ def proof_of_work():
     last_block = blockchain[-1]
     last_hash = hash_block(last_block)
     proof = 0
-    while valid_proof(open_transactions, last_hash, proof):
+    while not valid_proof(open_transactions, last_hash, proof):
         proof += 1
     return proof
 
@@ -151,6 +151,8 @@ def verify_chain():
             continue
         if block['previous_hash'] != hash_block(blockchain[index-1]):
             return False 
+        if not valid_proof(block['transactions'][:-1], block['previous_hash'], block['proof']):
+            return False
     return True
     # block_index = 0
     # is_valid = True
