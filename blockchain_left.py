@@ -14,8 +14,8 @@ participants =  set()
 
 def valid_proof(transactions, last_hash, proof):
     guess = (str(transactions) + str(last_hash) + str(proof)).encode()
-    guess_hash = hashlib.sha256(guess)
-    print(guess_hash)
+    guess_hash = hashlib.sha256(guess).hexdigest()
+    print('function: -> valid_proof:',guess_hash)
    
     return guess_hash[0:2] == '00'
 
@@ -120,7 +120,7 @@ def mine_block():
     return True
 
 def hash_block(block):
-    return hashlib.sha256(json.dumps(block).encode()).hexdigest()
+    return hashlib.sha256(json.dumps(block, sort_keys=True).encode()).hexdigest()
 
 
 
