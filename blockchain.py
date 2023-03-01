@@ -23,16 +23,45 @@ participants =  set()
 def load_data():
     with open('blockchain.txt', 'r')as file:
         content = file.readlines()
-        blockchain = content[0]
+        global blockchain
+        global open_transactions
+        blockchain = json.loads(content[0][:-1])
+        updated_blockchain =[]
+        for block in blockchain:
+            updated_block =  {
+                            'previous_hash': block['previous_hash'],
+                            'index': block['index'],
+                            'proof': block['proof'],
+                            'transactions':[OrderedDict(
+                            [('sender', tx['sender']),
+                            ('reciver',tx['reciver']),
+                            ('amount', tx['amount'])])for tx in block['transactions']]} 
+            updated_blockchain.append(updated_block)  
+        blockchain = updated_blockchain              
+        open_transactions = json.loads(content[1])
+        updated_transactions = []
+        for tx in open_transactions:
+            updated_transaction = {
+                [OrderedDict(
+                            [('sender', tx['sender']),
+                            ('reciver',tx['reciver']),
+                            ('amount', tx['amount'])])]
+            }
+            updated_transactions.append(updated_transaction)
+        open_transactions = updated_transactions
+        print('######################################',blockchain)
+        print('######################################', open_transactions)
         
+load_data()
+
 
 
 
 def save_data():
     with open('blockchain.txt', 'w')as file:
-        file.write(str(blockchain))
+        file.write(json.dumps(blockchain))
         file.write('\n')
-        file.write(str(open_transactions))
+        file.write(json.dumps(open_transactions))
 
 
 def valid_proof(transactions, last_hash, proof):
@@ -133,12 +162,14 @@ def mine_block():
     hashed_block = hash_block(last_block)
     proof = proof_of_work()
     reward_transaction = {'sender': 'MINING','reciver':owner, 'amount': MIN_GAS}
-    open_transactions.append(reward_transaction)
+
+    copied_transactions = open_transactions[:]
+    copied_transactions.append(reward_transaction)
     print('######## : ',hashed_block)
     block= {
             'previous_hash':hashed_block,
             'index':len(blockchain),
-            'transactions': open_transactions,
+            'transactions': copied_transactions,
             'proof': proof 
             }
     blockchain.append(block)
@@ -224,6 +255,7 @@ while waiting_for_input:
     elif user_choice == '2':
         if mine_block():
             open_transactions = []
+            save_data()
     elif user_choice == '3':
         print_blockchain_elements()
     elif user_choice == '4':
