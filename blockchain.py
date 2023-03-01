@@ -2,6 +2,13 @@ import sha256
 from functools import reduce
 import hashlib
 import json
+from collections import OrderedDict
+
+from hash_util import  hash_block
+#import save_data
+
+
+
 print('sha256: ',sha256.generate_hash("Hello World").hex())
 
 MIN_GAS = 0.001
@@ -10,6 +17,22 @@ blockchain = [genesis_block]
 open_transactions = []
 owner = 'hmannx'
 participants =  set()
+
+
+
+def load_data():
+    with open('blockchain.txt', 'r')as file:
+        content = file.readlines()
+        blockchain = content[0]
+        
+
+
+
+def save_data():
+    with open('blockchain.txt', 'w')as file:
+        file.write(str(blockchain))
+        file.write('\n')
+        file.write(str(open_transactions))
 
 
 def valid_proof(transactions, last_hash, proof):
@@ -45,10 +68,10 @@ def get_balance(participant):
     open_tx_sender = [[tx['amount'] for tx in open_transactions if tx['sender'] == participant]]
     tx_sender = [[tx['amount'] for tx in block['transactions']if tx['sender']==participant]for block in blockchain]
     amount_sent = reduce(lambda tx_sum, tx_amt:tx_sum + sum(tx_amt) if len(tx_amt)>0 else tx_sum + 0,tx_sender,0 )
-    #amount_recived = functools.reduce(lambda tx_sum, tx_amt: tx_sum + sum(tx_amt) if len(tx_amt)>0)
-    # for coin in tx_sender:
-    #     if len(coin)>0:
-    #         amount_sent += coin[0]
+    #amount_recived = reduce(lambda tx_sum, tx_amt: tx_sum + sum(tx_amt) if len(tx_amt)>0)
+    for coin in tx_sender:
+         if len(coin)>0:
+             amount_sent += coin[0]
 
     tx_sender.append(open_tx_sender)
     tx_reciver = [[tx['amount'] for tx in block['transactions']if tx['reciver']==participant]for block in blockchain]
@@ -94,11 +117,13 @@ def add_transaction(reciver, sender = owner ,amount=1.0):
        :recipient - the coinempfänger
        :amount - how much coins
      """
-    transaction = {'sender':sender, 'reciver':reciver, 'amount':amount}
+    #transaction = {'sender':sender, 'reciver':reciver, 'amount':amount}
+    transaction = OrderedDict([('sender', sender),('reciver',reciver),('amount', amount)])
     if  verify_transaction(transaction):
         open_transactions.append(transaction)
         participants.add(sender)
         participants.add(reciver)
+        save_data()
         return True
     return False
 
@@ -117,10 +142,10 @@ def mine_block():
             'proof': proof 
             }
     blockchain.append(block)
+    save_data()
     return True
 
-def hash_block(block):
-    return hashlib.sha256(json.dumps(block, sort_keys=True).encode()).hexdigest()
+
 
 
 
