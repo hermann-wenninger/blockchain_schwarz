@@ -20,4 +20,4 @@
 
 .vs
 __pycache__
-
+*.pyc
