@@ -45,17 +45,13 @@ class Wallet:
         private_key = RSA.generate(1024, Crypto.Random.new().read)
         public_key = private_key.publickey()
         return (
-            binascii
-            .hexlify(private_key.exportKey(format="DER"))
-            .decode('ascii'),
-            binascii.hexlify(public_key.exportKey(format="DER"))
-            .decode('ascii')
+            binascii.hexlify(private_key.exportKey(format="DER")).decode('ascii'),
+            binascii.hexlify(public_key.exportKey(format="DER")).decode('ascii')
         )
 
     def sign_transaction(self, sender, recipient, amount):
         # using private key to generate my signature for the transaction
-        signer = PKCS1_v1_5.new(RSA.importKey(
-            binascii.unhexlify(self.private_key)))
+        signer = PKCS1_v1_5.new(RSA.importKey(binascii.unhexlify(self.private_key)))
         h = SHA256.new((str(sender)+str(recipient)+str(amount)).encode('utf8'))
         signature = signer.sign(h)
         return binascii.hexlify(signature).decode('ascii')
