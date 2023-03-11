@@ -1,6 +1,7 @@
 import random 
 from time import time
 from collections import OrderedDict
+import json
 from rsa import generate_key_pair
 from create_keys import create_keys
 
@@ -26,7 +27,8 @@ def add_to_open_transactions(sender, empfaenger, geldmenge, miner=miner):
 
     time_stamp = time()
     gas = geldmenge/100 * 3
-    open_transactions.append(OrderedDict([('sender', sender),('empfaenger',empfaenger),('geldmenge', geldmenge),('miner', miner),('gas',gas),('timestamp',time_stamp)]))
+    ot =  OrderedDict([('sender', sender),('empfaenger',empfaenger),('geldmenge', geldmenge),('miner', miner),('gas',gas),('timestamp',time_stamp)])
+    open_transactions.append(json.dumps(ot))
     print(open_transactions)
 
 add_to_open_transactions('hans', 'peter',123)
