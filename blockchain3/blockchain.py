@@ -31,8 +31,17 @@ def add_to_open_transactions(sender, empfaenger, geldmenge, miner=miner):
     open_transactions.append(json.dumps(ot))
     print(open_transactions)
 
-add_to_open_transactions('hans', 'peter',123)
-add_to_open_transactions('hans', 'peter',123)
-add_to_open_transactions('hans', 'peter',123)
+
+
+
+
+
+
+
+
+
+add_to_open_transactions('hans22', 'peter555',123)
+add_to_open_transactions('hans33', 'peter6666',123)
+add_to_open_transactions('hans44', 'peter7777777777777',123)
 
 print('###########################################',open_transactions)
