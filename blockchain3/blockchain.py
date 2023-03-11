@@ -1,5 +1,6 @@
 import random 
 from rsa import generate_key_pair
+from create_keys import create_keys
 
 blockchain =[]
 genesis_block = {'previous_block':'','transaction':[],'proof':0}
@@ -12,20 +13,6 @@ user = [
 ]
 transaction_model = {'sender':'', 'empfaenger':'', 'menge':0, 'gas':0}
 
-primes = [11, 13, 17, 19, 23, 29, 31, 37, 41, 43]
 
-keys = []
+create_keys()
 
-for i in range(len(primes)):
-    x = random.choice(primes)
-    y = random.choice(primes)
-    if x == y:
-        continue
-    x,y = generate_key_pair(x,y)
-    keys.append((x,y))
-#print(keys)
-
-for i in range(len(keys)):
-    with open('./wallets/wallet-{}.txt'.format(i), mode='w') as f:
-        f.write(str(keys[i]))
-        
