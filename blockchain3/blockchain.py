@@ -45,3 +45,16 @@ add_to_open_transactions('hans33', 'peter6666',123)
 add_to_open_transactions('hans44', 'peter7777777777777',123)
 
 print('###########################################',open_transactions)
+
+
+print('1 for transaction')
+print('2 for mining')
+print('3 for test the rest')
+x = int(input('give us your choice'))
+match x:
+    case 1:
+       sender = input('den versender bitte: ')
+       empfaenger = input('den empfänger bitte: ')
+       geldmenge = input('bitte den betrag: ')
+    case 2:
+        print('3333')
