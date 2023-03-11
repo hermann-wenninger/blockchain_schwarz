@@ -19,6 +19,9 @@ transaction_model = {'sender':'', 'empfaenger':'', 'geldmenge':0, 'gas':0}
 create_keys('127.0.0.1')
 
 def add_to_open_transactions(sender, empfaenger, geldmenge, miner):
+
+    '''put the values sender empfaenger geldmenge to open transactions and calculate 3% gas from the geldmenge'''
+    
     time_stamp = time.time()
     gas = geldmenge/100 * 3
     OrderedDict([('sender', sender),('empfaenger',empfaenger),('geldmenge', geldmenge),('miner', miner),('gas',gas),('timestamp',time_stamp)])
