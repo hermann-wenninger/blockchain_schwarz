@@ -1,5 +1,5 @@
 from Crypto.PublicKey import RSA
-import hashlib
+
 
 def create_keys():
     for i in range(10):
@@ -27,6 +27,6 @@ def create_set():
             list.append(x)
     print(list)       
     print(dict)
-    
-    print(b)
+    print('########',b"".join(dict[0]))
+
 create_set()
