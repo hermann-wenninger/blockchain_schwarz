@@ -6,10 +6,12 @@ import json
 from rsa import generate_key_pair
 from create_keys import create_keys
 
-blockchain = []
+
+genesis_block = {'previous_block':'','transaction':[], 'transaction_hash':''}
+blockchain = [genesis_block]
 open_transactions = []
 miner = 'localhost'
-genesis_block = {'previous_block':'','transaction':[],'proof':0}
+
 user = [
     {'public_key':1,'private_key':3},
     {'public_key':1,'private_key':3},
@@ -37,18 +39,20 @@ def make_hash(open_transactions):
     transaction = open_transactions[-1]
     nonce = 0
     while True:
-        x = hashlib.sha256((transaction + str(nonce)).encode()).hexdigest()
+        hash = hashlib.sha256((transaction + str(nonce)).encode()).hexdigest()
         nonce += 1
-        print(x, nonce)
-        if x[0:2] == '0000':
+        print(hash, nonce)
+        if hash[0:3] == '000':
             break
     transaction = OrderedDict([(transaction,transaction),('nonce',nonce)])
-    print('###### make_hash ###### :',transaction)
-    return transaction
+    print('###### make_hash ###### :',transaction,hash,nonce)
+    return transaction, hash, nonce
 
 
 
-
+def mine_block():
+    take_last_transaction, his_hash, nonce = make_hash()
+    print(take_last_transaction, his_hash, nonce)
 
 
 
@@ -57,8 +61,8 @@ def make_hash(open_transactions):
 
 
 print('1 for transaction')
-print('2 for mining')
-print('3 for test the rest')
+print('2 hash transaction')
+print('3 mine block')
 while True:
     x = int(input('give us your choice'))
     match x:
@@ -69,3 +73,5 @@ while True:
             add_to_open_transactions(sender, empfaenger, geldmenge)
         case 2:
             make_hash(open_transactions)
+        case 3:
+            mine_block()

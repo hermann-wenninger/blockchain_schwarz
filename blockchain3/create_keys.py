@@ -3,6 +3,7 @@ import os
 from rsa import generate_key_pair
 
 
+
 def create_keys(ip_adress):
     if not os.path.exists("./wallets/wallet-9.txt"):
         primes = [11, 13, 17, 19, 23, 29, 31, 37, 41, 43]
