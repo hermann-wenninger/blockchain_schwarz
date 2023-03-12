@@ -34,9 +34,9 @@ def add_to_open_transactions(sender, empfaenger, geldmenge, miner=miner):
 
 
 
-def make_hash(open_transactions):
+def make_hash(transaction):
     '''make a valid secure hash sha256 and add nonce to ordereddict and return it'''
-    transaction = open_transactions[-1]
+   
     nonce = 0
     while True:
         hash = hashlib.sha256((transaction + str(nonce)).encode()).hexdigest()
@@ -51,8 +51,10 @@ def make_hash(open_transactions):
 
 
 def mine_block():
-    take_last_transaction, his_hash, nonce = make_hash()
+    take_last_transaction, his_hash, nonce = make_hash(open_transactions[-1])
+    last_block, last_block_hash, last_block_nonce = make_hash(blockchain[-1])
     print(take_last_transaction, his_hash, nonce)
+    
 
 
 
@@ -72,6 +74,6 @@ while True:
             geldmenge = input('bitte den betrag: ')
             add_to_open_transactions(sender, empfaenger, geldmenge)
         case 2:
-            make_hash(open_transactions)
-        case 3:
             mine_block()
+        case 3:
+            pass
