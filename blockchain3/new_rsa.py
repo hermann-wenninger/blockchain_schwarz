@@ -17,14 +17,16 @@ def create_keys():
 
 def create_set():
     list = []
+    dict = {}
     for i in range(10):
         with open(f"receiver-{i}.pem", 'rb')as f:
             x = f.readlines()
             print('xxxxxxxxxxx',len(x))
             print(x.remove(x[0]),x.remove(x[-1]))
+            dict[i] = x
             list.append(x)
     print(list)       
-    participants = set(list)
-    print(participants)
-
+    print(dict)
+    
+    print(b)
 create_set()
