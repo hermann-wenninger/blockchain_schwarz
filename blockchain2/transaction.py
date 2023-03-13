@@ -8,7 +8,7 @@ class Transaction(Printable):
         :sender: The sender of the coins.
         :recipient: The recipient of the coins.
         :signature: The signature of the transaction.
-        :amount: The amount of coins sent.
+        :amount: The amount of coins 
     """
 
     def __init__(self, sender, recipient, signature, amount):
