@@ -7,7 +7,7 @@ from rsa import generate_key_pair
 from create_keys import create_keys
 
 
-genesis_block = {'previous_block':'','transaction':[], 'transaction_hash':''}
+genesis_block = {'previous_block':'','transaction':[''], 'transaction_hash':''}
 blockchain = [genesis_block]
 open_transactions = []
 miner = 'localhost'
@@ -39,12 +39,12 @@ def make_hash(transaction):
    
     nonce = 0
     while True:
-        hash = hashlib.sha256((transaction + str(nonce)).encode()).hexdigest()
+        hash = hashlib.sha256((str(transaction) + str(nonce)).encode()).hexdigest()
         nonce += 1
         print(hash, nonce)
         if hash[0:3] == '000':
             break
-    transaction = OrderedDict([(transaction,transaction),('nonce',nonce)])
+    #transaction = OrderedDict([(transaction,transaction)])
     print('###### make_hash ###### :',transaction,hash,nonce)
     return transaction, hash, nonce
 
@@ -52,8 +52,13 @@ def make_hash(transaction):
 
 def mine_block():
     take_last_transaction, his_hash, nonce = make_hash(open_transactions[-1])
-    last_block, last_block_hash, last_block_nonce = make_hash(blockchain[-1])
+    last_block, last_block_hash, last_block_nonce = make_hash(blockchain[-1]['transaction'])
     print(take_last_transaction, his_hash, nonce)
+    print(last_block, last_block_hash, last_block_nonce)
+
+
+if len(open_transactions) > 1:
+    mine_block()
     
 
 
