@@ -7,7 +7,7 @@ from rsa import generate_key_pair
 from create_keys import create_keys
 
 
-genesis_block = {'previous_block':'','transaction':[''], 'transaction_hash':''}
+genesis_block = {'previous_block':'','transaction':[{'sender':'1', 'empfaenger':'1', 'geldmenge':1000000, 'gas':0},], 'transaction_hash':''}
 blockchain = [genesis_block]
 open_transactions = []
 miner = 'localhost'
@@ -55,6 +55,8 @@ def mine_block():
     last_block, last_block_hash, last_block_nonce = make_hash(blockchain[-1]['transaction'])
     print(take_last_transaction, his_hash, nonce)
     print(last_block, last_block_hash, last_block_nonce)
+    block = {}
+    blockchain.append(block)
 
 
 if len(open_transactions) > 1:
