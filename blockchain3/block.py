@@ -1,3 +1,7 @@
+import collections
+class reansactions():
+    def __init__():
+        self.
 class Block():
     def __init__(last_hash, transaction, nonce, hash)
         self.last_hash = last_hash
