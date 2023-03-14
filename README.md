@@ -1,6 +1,7 @@
 #### little Python blockchain
 
 ### in prozess
+
 <<<<<<< HEAD
 command on console:
 python blockchain.py

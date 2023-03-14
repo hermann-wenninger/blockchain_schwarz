@@ -160,6 +160,16 @@ def add_transaction(reciver, sender = owner ,amount=1.0):
 def mine_block():
     last_block = blockchain[-1] 
     hashed_block = hash_block(last_block)
+<<<<<<< HEAD:blockchain_left.py
+    reward_transaction = {
+        'sender': 'MINING',
+        'reciver':owner, 
+        'amount': MIN_GAS}
+    copied_transactions = open_transactions[:]
+    open_transactions.append(reward_transaction)
+    print('########',hashed_block)
+    block= {'previous_hash':hashed_block,
+=======
     proof = proof_of_work()
     reward_transaction = {'sender': 'MINING','reciver':owner, 'amount': MIN_GAS}
 
@@ -168,6 +178,7 @@ def mine_block():
     print('######## : ',hashed_block)
     block= {
             'previous_hash':hashed_block,
+>>>>>>> 33e6de9bb563358757bc6b076c8fef0ce8e2aa0a:blockchain.py
             'index':len(blockchain),
             'transactions': copied_transactions,
             'proof': proof 
