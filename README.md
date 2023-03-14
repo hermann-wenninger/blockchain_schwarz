@@ -3,6 +3,6 @@
 ### in prozess
 
 # blockchain2
-$conda activate environment
-$conda install -r requirements.txt
+$conda activate environment \n
+$conda install -r requirements.txt \n
 $python .\blockchain2\node.py
