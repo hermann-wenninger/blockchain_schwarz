@@ -34,7 +34,7 @@ def add_to_open_transactions(sender, empfaenger, geldmenge, miner=miner):
     print(open_transactions)
 
 
-@jit(nopython=False)
+#@jit(nopython=False)
 def make_hash(transaction):
     '''make a valid secure hash sha256 and add nonce to ordereddict and return it'''
    
