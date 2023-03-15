@@ -1,3 +1,4 @@
+from numba import jit
 import random 
 from time import time
 import hashlib
@@ -33,7 +34,7 @@ def add_to_open_transactions(sender, empfaenger, geldmenge, miner=miner):
     print(open_transactions)
 
 
-
+#@jit(nopython=False)
 def make_hash(transaction):
     '''make a valid secure hash sha256 and add nonce to ordereddict and return it'''
    
@@ -42,7 +43,7 @@ def make_hash(transaction):
         hash = hashlib.sha256((str(transaction) + str(nonce)).encode()).hexdigest()
         nonce += 1
         print(hash, nonce)
-        if hash[0:3] == '000':
+        if hash[0:4] == '0000':
             break
     #transaction = OrderedDict([(transaction,transaction)])
     print('###### make_hash ###### :',transaction,hash,nonce)
