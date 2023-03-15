@@ -1,10 +1,25 @@
-import collections
-class reansactions():
-    def __init__():
-        self.
-class Block():
-    def __init__(last_hash, transaction, nonce, hash)
-        self.last_hash = last_hash
-        self.transaction = []
-        self.nonce = nonce
-        self.hash = hash
+from collections import OrderedDict
+from dataclasses import dataclass
+
+@dataclass
+class Tansactions:
+    
+        sender: str
+        empfaenger: str
+        geldmenge = int
+
+
+
+@dataclass
+class Block:
+    
+    last_hash: str
+    transaction:OrderedDict
+    nonce:int
+    actual_hash: str
+
+
+@dataclass
+class Blockchain:
+
+    blockchain: list
