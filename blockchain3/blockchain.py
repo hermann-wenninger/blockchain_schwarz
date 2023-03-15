@@ -6,9 +6,10 @@ from collections import OrderedDict
 import json
 from rsa import generate_key_pair
 from create_keys import create_keys
+from set import parts
 
 
-genesis_block = {'previous_block':'','transaction':[{'sender':'1', 'empfaenger':'1', 'geldmenge':1000000, 'gas':0},], 'transaction_hash':''}
+genesis_block = {'previous_block':'','transaction':[{'sender':parts[0], 'empfaenger':parts[0], 'geldmenge':1000000, 'gas':0},], 'transaction_hash':''}
 blockchain = [genesis_block]
 open_transactions = []
 miner = 'localhost'
@@ -31,7 +32,7 @@ def add_to_open_transactions(sender, empfaenger, geldmenge, miner=miner):
     gas = int(geldmenge)/100 * 3
     ot =  OrderedDict([('sender', sender),('empfaenger',empfaenger),('geldmenge', geldmenge),('miner', miner),('gas',str(gas)),('timestamp',str(time_stamp))])
     open_transactions.append(json.dumps(ot))
-    print(open_transactions)
+    #print(open_transactions)
 
 
 #@jit(nopython=False)
@@ -46,7 +47,7 @@ def make_hash(transaction):
         if hash[0:4] == '0000':
             break
     #transaction = OrderedDict([(transaction,transaction)])
-    print('###### make_hash ###### :',transaction,hash,nonce)
+    #print('###### make_hash ###### :',transaction,hash,nonce)
     return transaction, hash, nonce
 
 
@@ -54,16 +55,18 @@ def make_hash(transaction):
 def mine_block():
     take_last_transaction, his_hash, nonce = make_hash(open_transactions[-1])
     last_block, last_block_hash, last_block_nonce = make_hash(blockchain[-1]['transaction'])
-    print(take_last_transaction, his_hash, nonce)
-    print(last_block, last_block_hash, last_block_nonce)
+    #print(take_last_transaction, his_hash, nonce)
+    #print(last_block, last_block_hash, last_block_nonce)
     block = {}
     blockchain.append(block)
-
-
+    next_block = {'previous_block':last_block_hash,'transaction':[take_last_transaction],'nonce':nonce, 'transaction_hash':his_hash}
+    blockchain.append(next_block)
+    print('next_block######',next_block)
+    print('#######blockchain',blockchain)
 if len(open_transactions) > 1:
     mine_block()
     
-
+print(blockchain)
 
 
 
